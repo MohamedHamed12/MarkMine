@@ -98,56 +98,61 @@ function collect(current: ExtensionSettings): ExtensionSettings {
   };
 }
 
-let current = await getSettings();
-render(current);
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  try {
-    current = collect(current);
-    void saveSettings(current).then(async () => {
-      await chrome.runtime.sendMessage({ type: 'markmine:sync' });
-      showMessage('Settings saved. Reload Redmine tabs to apply them.');
-    });
-  } catch (error) {
-    showMessage(`Could not save settings: ${String(error)}`);
-  }
-});
-
-document.querySelector('#reset')?.addEventListener('click', () => {
-  current = structuredClone(DEFAULT_SETTINGS);
+async function main(): Promise<void> {
+  let current = await getSettings();
   render(current);
-  showMessage('Defaults loaded. Save to apply.');
-});
 
-document.querySelector('#export')?.addEventListener('click', async () => {
-  const blob = new Blob([exportSettings(collect(current))], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = 'markmine-settings.json';
-  anchor.click();
-  URL.revokeObjectURL(url);
-});
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+      current = collect(current);
+      void saveSettings(current).then(async () => {
+        await chrome.runtime.sendMessage({ type: 'markmine:sync' });
+        showMessage('Settings saved. Reload Redmine tabs to apply them.');
+      });
+    } catch (error) {
+      showMessage(`Could not save settings: ${String(error)}`);
+    }
+  });
 
-const importFile = document.querySelector<HTMLInputElement>('#import-file')!;
-document.querySelector('#import')?.addEventListener('click', () => importFile.click());
-importFile.addEventListener('change', async () => {
-  const file = importFile.files?.[0];
-  if (!file) return;
-  try {
-    current = importSettings(await file.text());
+  document.querySelector('#reset')?.addEventListener('click', () => {
+    current = structuredClone(DEFAULT_SETTINGS);
     render(current);
-    showMessage('Settings imported. Save to apply.');
-  } catch (error) {
-    showMessage(`Invalid settings file: ${String(error)}`);
-  }
-});
+    showMessage('Defaults loaded. Save to apply.');
+  });
 
-const diagnosticsElement = document.querySelector<HTMLElement>('#diagnostics')!;
-const diagnosticsData = (await chrome.storage.local.get('markmine.diagnostics'))['markmine.diagnostics'];
-if (diagnosticsData) diagnosticsElement.textContent = JSON.stringify(diagnosticsData, null, 2);
-document.querySelector('#copy-diagnostics')?.addEventListener('click', async () => {
-  await navigator.clipboard.writeText(diagnosticsElement.textContent ?? '');
-  showMessage('Diagnostics copied.');
-});
+  document.querySelector('#export')?.addEventListener('click', async () => {
+    const blob = new Blob([exportSettings(collect(current))], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'markmine-settings.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  });
+
+  const importFile = document.querySelector<HTMLInputElement>('#import-file')!;
+  document.querySelector('#import')?.addEventListener('click', () => importFile.click());
+  importFile.addEventListener('change', async () => {
+    const file = importFile.files?.[0];
+    if (!file) return;
+    try {
+      current = importSettings(await file.text());
+      render(current);
+      showMessage('Settings imported. Save to apply.');
+    } catch (error) {
+      showMessage(`Invalid settings file: ${String(error)}`);
+    }
+  });
+
+  const diagnosticsElement = document.querySelector<HTMLElement>('#diagnostics')!;
+  const diagnosticsData = (await chrome.storage.local.get('markmine.diagnostics'))['markmine.diagnostics'];
+  if (diagnosticsData) diagnosticsElement.textContent = JSON.stringify(diagnosticsData, null, 2);
+  document.querySelector('#copy-diagnostics')?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(diagnosticsElement.textContent ?? '');
+    showMessage('Diagnostics copied.');
+  });
+
+}
+
+void main();
