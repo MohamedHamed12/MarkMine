@@ -96,4 +96,4 @@ Redmine themes and plugins can change editor DOM and private autocomplete/upload
 
 ## License
 
-MIT
+MIT 
