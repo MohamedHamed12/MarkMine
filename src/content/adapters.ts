@@ -1,5 +1,6 @@
 export interface RedmineAdapter {
   findEditableTextareas(root?: ParentNode): HTMLTextAreaElement[];
+  findNativeEditorChrome(textarea: HTMLTextAreaElement): HTMLElement[];
   findPreviewTrigger(textarea: HTMLTextAreaElement): HTMLElement | null;
   findAttachmentInput(textarea: HTMLTextAreaElement): HTMLInputElement | null;
   findSubmitButton(textarea: HTMLTextAreaElement): HTMLElement | null;
@@ -31,6 +32,22 @@ function findNearbyToolbar(textarea: HTMLTextAreaElement): HTMLElement | null {
 export const defaultAdapter: RedmineAdapter = {
   findEditableTextareas(root: ParentNode = document) {
     return Array.from(root.querySelectorAll<HTMLTextAreaElement>('textarea')).filter(isCandidate);
+  },
+
+  findNativeEditorChrome(textarea) {
+    const editor = textarea.closest<HTMLElement>('.jstEditor');
+    if (!editor) return [];
+
+    const elements = Array.from(editor.querySelectorAll<HTMLElement>('.jstElements, .jstTabs'));
+    const previous = editor.previousElementSibling;
+    if (previous instanceof HTMLElement && previous.matches('.jstTabs')) elements.push(previous);
+
+    const parent = editor.parentElement;
+    if (parent && parent.querySelectorAll(':scope > .jstEditor').length === 1) {
+      elements.push(...parent.querySelectorAll<HTMLElement>(':scope > .jstTabs'));
+    }
+
+    return Array.from(new Set(elements)).filter(element => !element.closest('.markmine-editor'));
   },
 
   findPreviewTrigger(textarea) {

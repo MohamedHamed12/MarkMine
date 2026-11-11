@@ -71,6 +71,7 @@ export class FieldController {
   private errorBanner: HTMLElement | null = null;
   private warningDetails: HTMLDetailsElement | null = null;
   private localPreview: HTMLElement | null = null;
+  private nativeEditorChrome: HTMLElement[] = [];
 
   constructor(options: FieldControllerOptions) {
     this.textarea = options.textarea;
@@ -119,12 +120,14 @@ export class FieldController {
       onPasteFiles: files => this.pasteFiles(files)
     });
 
+    this.nativeEditorChrome = this.adapter.findNativeEditorChrome(this.textarea);
     this.decorateToolbar();
     this.textarea.insertAdjacentElement('beforebegin', this.editor.root);
     this.textarea.addEventListener('input', this.handleNativeInput);
 
     if (initialConversionSafe) {
       this.textarea.classList.add('markmine-source-textarea');
+      this.setNativeEditorChromeVisible(false);
     } else {
       this.enabled = false;
       this.editor.setVisible(false);
@@ -136,6 +139,7 @@ export class FieldController {
       force.addEventListener('click', () => {
         this.enabled = true;
         this.textarea.classList.add('markmine-source-textarea');
+        this.setNativeEditorChromeVisible(false);
         this.editor?.setVisible(true);
         this.editor?.view.focus();
         fallback.remove();
@@ -150,6 +154,7 @@ export class FieldController {
   destroy(): void {
     this.textarea.removeEventListener('input', this.handleNativeInput);
     this.textarea.classList.remove('markmine-source-textarea');
+    this.setNativeEditorChromeVisible(true);
     this.editor?.destroy();
     if (this.draftTimer !== null) window.clearTimeout(this.draftTimer);
   }
@@ -191,7 +196,7 @@ export class FieldController {
 
     const toggle = createButton(t('textile', 'Textile'), 'Toggle native Textile editor');
     toggle.addEventListener('click', () => this.toggleMode(!this.enabled));
-    this.editor.toolbar.append(toggle);
+    this.editor.actions.append(toggle);
 
     const localPreview = createButton(t('localPreview', 'Local'), 'Toggle approximate local Markdown preview');
     localPreview.addEventListener('click', () => {
@@ -201,11 +206,11 @@ export class FieldController {
       this.editor.root.classList.toggle('markmine-split-preview', visible);
       if (visible) this.renderLocalPreview(this.editor.getValue());
     });
-    this.editor.toolbar.append(localPreview);
+    this.editor.actions.append(localPreview);
 
     const zen = createButton(t('zen', 'Zen'), 'Toggle full-screen editor');
     zen.addEventListener('click', () => this.editor?.root.classList.toggle('markmine-zen'));
-    this.editor.toolbar.append(zen);
+    this.editor.actions.append(zen);
 
     this.localPreview = document.createElement('div');
     this.localPreview.className = 'markmine-local-preview wiki';
@@ -234,7 +239,7 @@ export class FieldController {
         if (template) this.editor?.insert(resolveVariables(template.content));
         select.value = '';
       });
-      this.editor.toolbar.append(select);
+      this.editor.actions.append(select);
     }
 
     if (this.settings.replies.length > 0) {
@@ -253,7 +258,7 @@ export class FieldController {
         if (reply) this.editor?.insert(resolveVariables(reply.content));
         select.value = '';
       });
-      this.editor.toolbar.append(select);
+      this.editor.actions.append(select);
     }
   }
 
@@ -348,6 +353,12 @@ export class FieldController {
     this.editor.root.prepend(banner);
   }
 
+  private setNativeEditorChromeVisible(visible: boolean): void {
+    for (const element of this.nativeEditorChrome) {
+      element.classList.toggle('markmine-native-chrome-hidden', !visible);
+    }
+  }
+
   private toggleMode(enableMarkdown: boolean): void {
     if (!this.editor || enableMarkdown === this.enabled) return;
 
@@ -355,6 +366,7 @@ export class FieldController {
       this.syncConvertedValue(this.editor.getValue(), true);
       this.editor.setVisible(false);
       this.textarea.classList.remove('markmine-source-textarea');
+      this.setNativeEditorChromeVisible(true);
       this.textarea.focus();
       this.enabled = false;
       return;
@@ -366,6 +378,7 @@ export class FieldController {
     this.currentMarkdown = markdown;
     this.editor.setValue(markdown);
     this.textarea.classList.add('markmine-source-textarea');
+    this.setNativeEditorChromeVisible(false);
     this.editor.setVisible(true);
     this.editor.view.focus();
     this.enabled = true;

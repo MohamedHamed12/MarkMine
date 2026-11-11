@@ -1,4 +1,5 @@
-.markmine-source-textarea {
+.markmine-source-textarea,
+.markmine-native-chrome-hidden {
   display: none !important;
 }
 
@@ -14,11 +15,33 @@
 .markmine-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
+  gap: 8px;
   align-items: center;
-  padding: 6px;
+  min-height: 42px;
+  padding: 5px 6px;
   border-bottom: 1px solid #d0d7de;
   background: #f6f8fa;
+}
+
+.markmine-toolbar-formatting,
+.markmine-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+
+.markmine-toolbar-actions {
+  gap: 4px;
+  margin-inline-start: auto;
+}
+
+.markmine-toolbar-actions::before {
+  content: '';
+  width: 1px;
+  height: 24px;
+  margin-inline: 2px;
+  background: #d0d7de;
 }
 
 .markmine-toolbar-button,
@@ -37,6 +60,12 @@
 .markmine-toolbar-button {
   min-width: 30px;
   padding: 3px 7px;
+  font-size: 13px;
+}
+
+.markmine-toolbar-actions .markmine-toolbar-button {
+  min-width: auto;
+  padding-inline: 9px;
 }
 
 .markmine-toolbar-button:hover,
@@ -49,11 +78,17 @@
 }
 
 .markmine-toolbar-select {
-  padding: 3px 22px 3px 7px;
+  min-width: 112px;
+  max-width: 160px;
+  height: 30px;
+  padding: 3px 26px 3px 8px;
+  border-color: #d0d7de;
+  background-color: #fff;
 }
 
 .markmine-preview-button {
-  margin-inline-start: auto;
+  border-color: #afb8c1;
+  background: #fff;
   font-weight: 600;
 }
 
@@ -152,6 +187,17 @@ html[data-markmine-direction='ltr'] .markmine-toolbar {
 .markmine-dark .markmine-toolbar {
   border-color: #30363d;
   background: #161b22;
+}
+
+.markmine-dark .markmine-toolbar-actions::before {
+  background: #30363d;
+}
+
+.markmine-dark .markmine-toolbar-select,
+.markmine-dark .markmine-preview-button {
+  border-color: #30363d;
+  background: #0d1117;
+  color: #e6edf3;
 }
 
 .markmine-dark .markmine-toolbar-button:hover,
@@ -287,6 +333,21 @@ html[data-markmine-direction='ltr'] .markmine-toolbar {
 }
 
 @media (max-width: 900px) {
+  .markmine-toolbar-actions {
+    width: 100%;
+    margin-inline-start: 0;
+    padding-top: 5px;
+    border-top: 1px solid #d0d7de;
+  }
+
+  .markmine-toolbar-actions::before {
+    display: none;
+  }
+
+  .markmine-dark .markmine-toolbar-actions {
+    border-top-color: #30363d;
+  }
+
   .markmine-split-preview {
     display: block;
   }

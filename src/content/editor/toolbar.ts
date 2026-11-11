@@ -69,6 +69,10 @@ export function createToolbar(view: EditorView): HTMLElement {
   toolbar.setAttribute('role', 'toolbar');
   toolbar.setAttribute('aria-label', 'Markdown formatting');
 
+  const formatting = document.createElement('div');
+  formatting.className = 'markmine-toolbar-formatting';
+  toolbar.append(formatting);
+
   for (const command of toolbarCommands) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -77,7 +81,7 @@ export function createToolbar(view: EditorView): HTMLElement {
     button.title = command.title;
     button.setAttribute('aria-label', command.title);
     button.addEventListener('click', () => command.run(view));
-    toolbar.append(button);
+    formatting.append(button);
   }
 
   return toolbar;

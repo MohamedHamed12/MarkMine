@@ -22,6 +22,7 @@ export interface MarkdownEditorOptions {
 export interface MarkdownEditorHandle {
   root: HTMLElement;
   toolbar: HTMLElement;
+  actions: HTMLElement;
   view: EditorView;
   getValue(): string;
   setValue(value: string): void;
@@ -200,19 +201,23 @@ export function createMarkdownEditor(options: MarkdownEditorOptions): MarkdownEd
   const state = EditorState.create({ doc: options.initialValue, extensions });
   const view = new EditorView({ state, parent: editorHost });
   const toolbar = createToolbar(view);
+  const actions = document.createElement('div');
+  actions.className = 'markmine-toolbar-actions';
 
   const preview = document.createElement('button');
   preview.type = 'button';
   preview.className = 'markmine-toolbar-button markmine-preview-button';
   preview.textContent = t('preview', 'Preview');
   preview.addEventListener('click', options.onPreview);
-  toolbar.append(preview);
+  actions.append(preview);
+  toolbar.append(actions);
 
   host.append(toolbar, editorHost);
 
   return {
     root: host,
-    toolbar: toolbar,
+    toolbar,
+    actions,
     view,
     getValue: () => view.state.doc.toString(),
     setValue(value) {
