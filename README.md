@@ -45,9 +45,20 @@ packages/markmine-<version>.zip
 
 The ZIP contains the extension files at its root, including `manifest.json`, so it can be extracted and loaded directly as an unpacked Chrome/Edge extension.
 
-Every push to `main` also uploads the versioned ZIP as the **markmine-extension** GitHub Actions artifact. Pushing a tag that matches the manifest version, for example `v0.1.0`, automatically creates or updates the GitHub Release and attaches the same ZIP.
+Every push to `main` also uploads the versioned ZIP as the **markmine-extension** GitHub Actions artifact.
 
-Keep `manifest.json` and `package.json` versions identical. Packaging fails if they differ.
+You can also create the package manually from GitHub without editing or committing any file:
+
+1. Open **Actions**.
+2. Open **Release Extension**.
+3. Choose **Run workflow**.
+4. Leave **Create/update the GitHub Release** enabled to publish the ZIP under the version from `manifest.json`, or disable it to generate an Actions artifact only.
+
+For example, version `0.1.0` produces `markmine-0.1.0.zip` and, when publishing is enabled, release/tag `v0.1.0`.
+
+Pushing a tag that matches the manifest version, for example `v0.1.0`, still publishes the release automatically.
+
+Keep `manifest.json` and `package.json` versions identical. Packaging fails if they differ. A manual release also refuses to move an existing version tag to a different commit; bump both version files before publishing the next release.
 
 ## Development
 
