@@ -7,7 +7,9 @@
     "build": "node scripts/build.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run typecheck && npm test && npm run build"
+    "check": "npm run typecheck && npm test && npm run build",
+    "package:dist": "node scripts/package.mjs",
+    "package": "npm run build && npm run package:dist"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.0",
@@ -28,6 +30,7 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.8",
     "fast-check": "^4.3.0",
-    "@playwright/test": "^1.56.1"
+    "@playwright/test": "^1.56.1",
+    "archiver": "^7.0.1"
   }
 }

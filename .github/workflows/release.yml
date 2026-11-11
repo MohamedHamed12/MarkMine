@@ -1,0 +1,43 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --legacy-peer-deps
+      - run: npm run check
+      - run: npm run package:dist
+      - name: Verify tag matches extension version
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./manifest.json').version")"
+          if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match manifest version v$VERSION"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: markmine-extension-${{ github.ref_name }}
+          path: packages/*.zip
+          if-no-files-found: error
+      - name: Publish GitHub release package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" --title "MarkMine $GITHUB_REF_NAME" --generate-notes
+          fi
+          gh release upload "$GITHUB_REF_NAME" packages/*.zip --clobber

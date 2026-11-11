@@ -28,6 +28,27 @@ The extension is opt-in per Redmine origin. It does not require a Redmine plugin
 - Import/export settings and local diagnostics logging.
 - English/Arabic extension metadata.
 
+## Packaging
+
+Build a ready-to-install ZIP locally:
+
+```bash
+npm install
+npm run package
+```
+
+The package is written to:
+
+```text
+packages/markmine-<version>.zip
+```
+
+The ZIP contains the extension files at its root, including `manifest.json`, so it can be extracted and loaded directly as an unpacked Chrome/Edge extension.
+
+Every push to `main` also uploads the versioned ZIP as the **markmine-extension** GitHub Actions artifact. Pushing a tag that matches the manifest version, for example `v0.1.0`, automatically creates or updates the GitHub Release and attaches the same ZIP.
+
+Keep `manifest.json` and `package.json` versions identical. Packaging fails if they differ.
+
 ## Development
 
 Requirements: Node.js 20+ and npm.
