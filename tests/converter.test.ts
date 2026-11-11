@@ -51,6 +51,10 @@ describe('markdownToTextile', () => {
     expect(result.text).toContain('* [ ] todo');
     expect(result.warnings.some(warning => warning.code === 'task-list-degraded')).toBe(true);
   });
+
+  it('converts supported emoji shortcodes to Unicode', () => {
+    expect(markdownToTextile(':x: :rocket:').text).toBe('❌ 🚀');
+  });
 });
 
 describe('textileToMarkdown', () => {
@@ -75,6 +79,7 @@ describe('supported-subset round trip', () => {
       fc.array(fc.stringMatching(/^[A-Za-z0-9 ,.":;]*$/), { minLength: 1, maxLength: 6 }),
       (lines: string[]) => {
         const markdown = lines.join('\n').trimEnd();
+        fc.pre(!/:(?:smile|thumbsup|tada|warning|bug|rocket|white_check_mark|x|eyes|fire):/.test(markdown));
         const textile = markdownToTextile(markdown).text;
         const roundTrip = textileToMarkdown(textile).text;
         expect(roundTrip.replace(/\s+/g, ' ').trim()).toBe(markdown.replace(/\s+/g, ' ').trim());
