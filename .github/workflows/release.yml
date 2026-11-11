@@ -4,6 +4,13 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: 'Create/update the GitHub Release and attach the Chrome extension ZIP'
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -13,31 +20,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+
       - run: npm install --legacy-peer-deps
       - run: npm run check
       - run: npm run package:dist
-      - name: Verify tag matches extension version
+
+      - name: Resolve release version
+        id: release
         shell: bash
         run: |
           VERSION="$(node -p "require('./manifest.json').version")"
-          if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match manifest version v$VERSION"
+          TAG="v$VERSION"
+
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF_NAME" != "$TAG" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match manifest version $TAG"
             exit 1
           fi
+
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            TAG_SHA="$(git rev-list -n 1 "$TAG")"
+            if [ "$TAG_SHA" != "$GITHUB_SHA" ]; then
+              echo "Tag $TAG already exists at $TAG_SHA, not current commit $GITHUB_SHA."
+              echo "Bump manifest.json and package.json before publishing a new release."
+              exit 1
+            fi
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "package=packages/markmine-$VERSION.zip" >> "$GITHUB_OUTPUT"
+
       - uses: actions/upload-artifact@v4
         with:
-          name: markmine-extension-${{ github.ref_name }}
-          path: packages/*.zip
+          name: markmine-extension-${{ steps.release.outputs.version }}
+          path: ${{ steps.release.outputs.package }}
           if-no-files-found: error
+          retention-days: 30
+
       - name: Publish GitHub release package
+        if: github.event_name == 'push' || inputs.publish_release
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_PACKAGE: ${{ steps.release.outputs.package }}
         shell: bash
         run: |
-          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release create "$GITHUB_REF_NAME" --title "MarkMine $GITHUB_REF_NAME" --generate-notes
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG"               --target "$GITHUB_SHA"               --title "MarkMine $RELEASE_TAG"               --generate-notes
           fi
-          gh release upload "$GITHUB_REF_NAME" packages/*.zip --clobber
+
+          gh release upload "$RELEASE_TAG" "$RELEASE_PACKAGE" --clobber
