@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a focused improvement to the Redmine authoring workflow.
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What Redmine authoring problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Content-safety considerations
+      description: Could this change affect stored Textile/Markdown or submission behavior?

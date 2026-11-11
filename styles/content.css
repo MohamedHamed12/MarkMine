@@ -1,0 +1,301 @@
+.markmine-source-textarea {
+  display: none !important;
+}
+
+.markmine-editor {
+  margin: 6px 0 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #fff;
+  color: #24292f;
+  overflow: hidden;
+}
+
+.markmine-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #d0d7de;
+  background: #f6f8fa;
+}
+
+.markmine-toolbar-button,
+.markmine-toolbar-select,
+.markmine-copy-helpers button,
+.markmine-show-more {
+  min-height: 30px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.markmine-toolbar-button {
+  min-width: 30px;
+  padding: 3px 7px;
+}
+
+.markmine-toolbar-button:hover,
+.markmine-toolbar-button:focus-visible,
+.markmine-toolbar-select:hover,
+.markmine-toolbar-select:focus-visible {
+  border-color: #8c959f;
+  background: #fff;
+  outline: 2px solid transparent;
+}
+
+.markmine-toolbar-select {
+  padding: 3px 22px 3px 7px;
+}
+
+.markmine-preview-button {
+  margin-inline-start: auto;
+  font-weight: 600;
+}
+
+.markmine-editor-surface .cm-editor.cm-focused {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+}
+
+.markmine-draft-banner,
+.markmine-error-banner {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.markmine-draft-banner {
+  background: #ddf4ff;
+}
+
+.markmine-error-banner {
+  background: #ffebe9;
+  color: #82071e;
+}
+
+.markmine-error-banner span,
+.markmine-draft-banner span {
+  flex: 1;
+}
+
+.markmine-copy-helpers {
+  display: inline-flex;
+  gap: 4px;
+  margin-inline-start: 10px;
+  vertical-align: middle;
+}
+
+.markmine-copy-helpers button,
+.markmine-show-more {
+  border-color: #d0d7de;
+  background: #f6f8fa;
+  padding: 2px 7px;
+  font-size: 12px;
+}
+
+.markmine-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, var(--markmine-badge-color), #000 15%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--markmine-badge-color), transparent 88%);
+}
+
+.markmine-collapsed-comment {
+  position: relative;
+  max-height: 520px;
+  overflow: hidden;
+}
+
+.markmine-collapsed-comment::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 80px;
+  background: linear-gradient(transparent, Canvas);
+  pointer-events: none;
+}
+
+.markmine-task-progress {
+  margin: 6px 0;
+  color: #57606a;
+  font-size: 12px;
+}
+
+.markmine-task-progress + ul input[type='checkbox'] {
+  margin-inline-end: 4px;
+}
+
+html[data-markmine-direction='rtl'] .markmine-editor,
+html[data-markmine-direction='rtl'] .markmine-toolbar {
+  direction: rtl;
+}
+
+html[data-markmine-direction='ltr'] .markmine-editor,
+html[data-markmine-direction='ltr'] .markmine-toolbar {
+  direction: ltr;
+}
+
+.markmine-dark .markmine-editor {
+  border-color: #30363d;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.markmine-dark .markmine-toolbar {
+  border-color: #30363d;
+  background: #161b22;
+}
+
+.markmine-dark .markmine-toolbar-button:hover,
+.markmine-dark .markmine-toolbar-button:focus-visible,
+.markmine-dark .markmine-toolbar-select:hover,
+.markmine-dark .markmine-toolbar-select:focus-visible {
+  border-color: #6e7681;
+  background: #21262d;
+}
+
+.markmine-dark .markmine-editor-surface .cm-editor,
+.markmine-dark .markmine-editor-surface .cm-gutters {
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markmine-editor *,
+  .markmine-copy-helpers * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+.markmine-editor-surface {
+  resize: vertical;
+  overflow: auto;
+  min-height: 160px;
+}
+
+.markmine-zen {
+  position: fixed !important;
+  inset: 12px !important;
+  z-index: 2147483646 !important;
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  box-shadow: 0 12px 48px #0006;
+}
+
+.markmine-zen .markmine-editor-surface {
+  flex: 1;
+  resize: none;
+}
+
+.markmine-zen .cm-editor,
+.markmine-zen .cm-scroller {
+  height: 100%;
+  max-height: none;
+}
+
+.markmine-conversion-warnings {
+  padding: 6px 10px;
+  border-top: 1px solid #d0d7de;
+  background: #fff8c5;
+  color: #4d2d00;
+  font-size: 12px;
+}
+
+.markmine-conversion-warnings summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.markmine-conversion-warnings ul {
+  margin: 6px 0 0 20px;
+  padding: 0;
+}
+
+.markmine-dark body,
+.markmine-dark #wrapper,
+.markmine-dark #content,
+.markmine-dark #main,
+.markmine-dark .box,
+.markmine-dark table.list,
+.markmine-dark .journal,
+.markmine-dark .issue {
+  background-color: #0d1117 !important;
+  color: #e6edf3 !important;
+}
+
+.markmine-dark a {
+  color: #58a6ff;
+}
+
+.markmine-dark input,
+.markmine-dark select,
+.markmine-dark textarea,
+.markmine-dark button {
+  border-color: #30363d;
+  background-color: #161b22;
+  color: #e6edf3;
+}
+
+.markmine-dark .markmine-conversion-warnings {
+  border-color: #30363d;
+  background: #2d2400;
+  color: #f2cc60;
+}
+
+.markmine-local-preview {
+  padding: 12px 16px;
+  border-top: 1px solid #d0d7de;
+  background: #fff;
+  color: #24292f;
+}
+
+.markmine-split-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.markmine-split-preview .markmine-toolbar,
+.markmine-split-preview .markmine-conversion-warnings,
+.markmine-split-preview .markmine-draft-banner,
+.markmine-split-preview .markmine-error-banner {
+  grid-column: 1 / -1;
+}
+
+.markmine-split-preview .markmine-editor-surface {
+  border-inline-end: 1px solid #d0d7de;
+}
+
+.markmine-split-preview .markmine-local-preview {
+  border-top: 0;
+  overflow: auto;
+}
+
+.markmine-dark .markmine-local-preview {
+  border-color: #30363d;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+@media (max-width: 900px) {
+  .markmine-split-preview {
+    display: block;
+  }
+
+  .markmine-split-preview .markmine-editor-surface {
+    border-inline-end: 0;
+  }
+
+  .markmine-split-preview .markmine-local-preview {
+    border-top: 1px solid #d0d7de;
+  }
+}

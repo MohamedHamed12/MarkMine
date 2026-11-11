@@ -1,0 +1,51 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  min-width: 310px;
+}
+
+main {
+  padding: 16px;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+p {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  opacity: .72;
+}
+
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border: 1px solid #1f6feb;
+  border-radius: 6px;
+  background: #1f6feb;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+button.secondary {
+  border-color: #8c959f;
+  background: transparent;
+  color: inherit;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: default;
+}

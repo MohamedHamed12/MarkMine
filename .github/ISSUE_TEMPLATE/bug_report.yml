@@ -1,0 +1,42 @@
+name: Bug report
+description: Report a MarkMine problem without losing the Redmine context needed to reproduce it.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: input
+    id: redmine-version
+    attributes:
+      label: Redmine version
+      placeholder: 6.0.6
+    validations:
+      required: true
+  - type: dropdown
+    id: formatter
+    attributes:
+      label: Server text formatter
+      options: [Textile, Markdown, Unknown]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: MarkMine diagnostics
+      description: Paste the local diagnostics from MarkMine Settings. Remove anything you do not want to share.

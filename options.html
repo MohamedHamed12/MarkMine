@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MarkMine Settings</title>
+  <link rel="stylesheet" href="styles/options.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1 data-i18n="optionsTitle">MarkMine Settings</h1>
+      <p>Markdown-first editing for Redmine. Everything stays in your browser and your Redmine instance.</p>
+    </header>
+
+    <form id="settings-form">
+      <section>
+        <h2 data-i18n="enabledSites">Enabled sites</h2>
+        <div id="origins"></div>
+      </section>
+
+      <section class="grid">
+        <label>Line breaks
+          <select name="lineBreakMode">
+            <option value="preserve">Preserve each newline</option>
+            <option value="markdown">Markdown semantics</option>
+          </select>
+        </label>
+        <label>Theme
+          <select name="theme">
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label>Direction
+          <select name="rtl">
+            <option value="auto">Auto</option>
+            <option value="ltr">LTR</option>
+            <option value="rtl">RTL</option>
+          </select>
+        </label>
+        <label>Branch pattern
+          <input name="branchPattern" placeholder="feature/{id}-{slug}">
+        </label>
+        <label class="check"><input name="monospace" type="checkbox"> Monospace editor</label>
+        <label class="check"><input name="lineWrap" type="checkbox"> Wrap long lines</label>
+        <label class="check"><input name="debug" type="checkbox"> Local debug log</label>
+      </section>
+
+      <section>
+        <h2 data-i18n="features">Features</h2>
+        <div class="checks">
+          <label><input name="feature.autocomplete" type="checkbox"> Autocomplete and slash commands</label>
+          <label><input name="feature.drafts" type="checkbox"> Draft history and recovery</label>
+          <label><input name="feature.badges" type="checkbox"> Colored badges</label>
+          <label><input name="feature.shortcuts" type="checkbox"> Page keyboard shortcuts</label>
+          <label><input name="feature.darkMode" type="checkbox"> Dark mode</label>
+          <label><input name="feature.quoteReply" type="checkbox"> Quote reply</label>
+          <label><input name="feature.copyHelpers" type="checkbox"> Copy helpers</label>
+          <label><input name="feature.relativeTimes" type="checkbox"> Relative timestamps</label>
+          <label><input name="feature.collapseComments" type="checkbox"> Collapse long comments</label>
+          <label><input name="feature.taskLists" type="checkbox"> Render task lists</label>
+          <label><input name="feature.hoverCards" type="checkbox"> Issue hover details</label>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-i18n="templates">Templates</h2>
+        <p class="hint">JSON array. Tracker may be a Redmine tracker name or <code>*</code>.</p>
+        <textarea id="templates" rows="14"></textarea>
+      </section>
+
+      <section>
+        <h2 data-i18n="savedReplies">Saved replies</h2>
+        <p class="hint">Variables: <code>{{issue.id}}</code>, <code>{{issue.subject}}</code>, <code>{{user.name}}</code>, <code>{{date}}</code>.</p>
+        <textarea id="replies" rows="10"></textarea>
+      </section>
+
+      <section>
+        <h2 data-i18n="diagnostics">Diagnostics</h2>
+        <p class="hint">Local-only details from the most recently activated Redmine page.</p>
+        <pre id="diagnostics">No diagnostics captured yet.</pre>
+        <button type="button" id="copy-diagnostics" class="secondary">Copy diagnostics</button>
+      </section>
+
+      <footer>
+        <button type="submit" data-i18n="save">Save</button>
+        <button type="button" id="reset" class="secondary" data-i18n="resetDefaults">Reset to defaults</button>
+        <button type="button" id="export" class="secondary" data-i18n="export">Export</button>
+        <button type="button" id="import" class="secondary" data-i18n="import">Import</button>
+        <input type="file" id="import-file" accept="application/json" hidden>
+        <span id="message" role="status"></span>
+      </footer>
+    </form>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

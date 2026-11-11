@@ -1,0 +1,125 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+section {
+  margin: 0 0 24px;
+  padding: 18px;
+  border: 1px solid #8c959f66;
+  border-radius: 8px;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+.check,
+.checks label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input[type='text'],
+input:not([type]),
+select,
+textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #8c959f;
+  border-radius: 6px;
+  background: Canvas;
+  color: CanvasText;
+}
+
+textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.origin-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 12px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.hint {
+  opacity: .75;
+}
+
+footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 8px 12px;
+  border: 1px solid #1f6feb;
+  border-radius: 6px;
+  background: #1f6feb;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.secondary {
+  border-color: #8c959f;
+  background: transparent;
+  color: inherit;
+}
+
+#message {
+  min-height: 1.3em;
+}
+
+#diagnostics {
+  overflow: auto;
+  padding: 12px;
+  border-radius: 6px;
+  background: color-mix(in srgb, CanvasText, transparent 94%);
+  white-space: pre-wrap;
+}
