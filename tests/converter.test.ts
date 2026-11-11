@@ -55,6 +55,11 @@ describe('markdownToTextile', () => {
   it('converts supported emoji shortcodes to Unicode', () => {
     expect(markdownToTextile(':x: :rocket:').text).toBe('❌ 🚀');
   });
+
+  it('treats numeric list markers as Markdown ordered lists', () => {
+    expect(markdownToTextile('0. item').text).toBe('# item');
+    expect(markdownToTextile('0.').text).toBe('#');
+  });
 });
 
 describe('textileToMarkdown', () => {
@@ -80,6 +85,7 @@ describe('supported-subset round trip', () => {
       (lines: string[]) => {
         const markdown = lines.join('\n').trimEnd();
         fc.pre(!/:(?:smile|thumbsup|tada|warning|bug|rocket|white_check_mark|x|eyes|fire):/.test(markdown));
+        fc.pre(!lines.some(line => /^\s{0,3}\d+\.(?:\s|$)/.test(line)));
         const textile = markdownToTextile(markdown).text;
         const roundTrip = textileToMarkdown(textile).text;
         expect(roundTrip.replace(/\s+/g, ' ').trim()).toBe(markdown.replace(/\s+/g, ' ').trim());
